@@ -27,7 +27,7 @@ def post_new(request):
     else:
         form = Post_forms()
 
-    return render(request, 'post_new.html', {'form': form})
+    return render(request, 'post_new.html', {'post': form})
 
 
 def post_edit(request, post_id):
@@ -43,7 +43,7 @@ def post_edit(request, post_id):
     else:
         form = Post_forms(instance=data)
 
-    return render(request, 'post_edit.html', {'form': form})
+    return render(request, 'post_edit.html', {'post': form})
 
 
 def post_delete(request, post_id):
