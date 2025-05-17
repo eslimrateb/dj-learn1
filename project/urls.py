@@ -20,16 +20,16 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from blog.views import post_delete, post_details, post_edit, post_list, post_new
+from blog.views import PostCreate, PostDetail, PostList, PostUpdata, PostDelete
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', post_list),
-    path('blog/<int:post_id>', post_details),
-    path('blog/<int:post_id>/edit', post_edit),
-    path('blog/<int:post_id>/delete', post_delete),
-    path('blog/new', post_new)
+    path('blog/', PostList.as_view()),
+    path('blog/<int:pk>', PostDetail.as_view()),
+    path('blog/<int:pk>/edit', PostUpdata.as_view()),
+    path('blog/<int:pk>/delete', PostDelete.as_view()),
+    path('blog/new', PostCreate.as_view())
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

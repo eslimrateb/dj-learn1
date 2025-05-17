@@ -1,51 +1,35 @@
 from django.shortcuts import render, redirect
 from .models import Post
 from .forms import Post_forms
-
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 # Create your views here.
 
 
-def post_list(request):
-    data = Post.objects.all()
-    return render(request, 'post_list.html', {'post': data})
+class PostList(ListView):  # need query , all is default
+    model = Post
+    # template_name :app/model_list.html
+    # context_object_name  : object_list or model_list
 
 
-def post_details(request, post_id):
-    data = Post.objects.get(id=post_id)
-    return render(request, 'post_details.html', {'post': data})
+class PostDetail(DetailView):
+    model = Post
+    # Optional: defaults to blog/post_detail.html
+    # Optional: defaults to 'object'
 
 
-def post_new(request):
-    if request.method == 'POST':
-        form = Post_forms(request.POST, request.FILES)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.author = request.user
-            form.save()
-            return redirect('/blog')
-
-    else:
-        form = Post_forms()
-
-    return render(request, 'post_new.html', {'post': form})
+class PostCreate(CreateView):
+    model = Post
+    fields = '__all__'
+    success_url = '/blog'  # Optional: defaults to blog/post_form.html
 
 
-def post_edit(request, post_id):
-    data = Post.objects.get(id=post_id)
-    if request.method == 'POST':
-        form = Post_forms(request.POST, request.FILES, instance=data)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.author = request.user
-            form.save()
-            return redirect('/blog')
-
-    else:
-        form = Post_forms(instance=data)
-
-    return render(request, 'post_edit.html', {'post': form})
+class PostUpdata(UpdateView):
+    model = Post
+    fields = '__all__'
+    success_url = '/blog'  # the same file template
+    # template_name = 'blog/post_edit.html'
 
 
-def post_delete(request, post_id):
-    Post.objects.get(id=post_id).delete()
-    return redirect('/blog')
+class PostDelete(DeleteView):
+    model = Post
+    success_url = '/blog'
